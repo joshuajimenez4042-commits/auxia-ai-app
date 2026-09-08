@@ -16,16 +16,9 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## 2. Configurar la IA
+## 2. Ejecutar sin claves
 
-Copia `.env.example` con el nombre `.env` y agrega tu clave de API:
-
-```bash
-OPENAI_API_KEY=tu_clave
-AI_MODEL=gpt-4o-mini
-```
-
-La clave se usa únicamente en `app.py`, nunca en el navegador. Si no agregas una clave, la app funciona en modo demo con respuestas locales.
+Auxia funciona de forma local, sin cuentas, claves ni servicios externos. Las respuestas básicas se generan dentro de `app.py`.
 
 ## 3. Ejecutar
 
@@ -47,10 +40,10 @@ Abre http://127.0.0.1:5000 en tu navegador. Puedes instalarla desde el menú del
 
 Solo la cuenta cuyo correo y contraseña coincidan con `MODERATOR_EMAIL` y `MODERATOR_PASSWORD` recibe permisos de moderador. La sesión se guarda en una cookie firmada por Flask; cambia `FLASK_SECRET_KEY` antes de publicar.
 
-El botón **Imagen** abre la cámara en celulares compatibles o el selector de archivos en computadora. Las imágenes se mandan al servidor como datos temporales y, con una clave compatible con visión, la IA puede analizarlas. No se guardan las imágenes en el historial.
+El botón **Imagen** abre la cámara en celulares compatibles o el selector de archivos en computadora. La imagen se adjunta a la conversación, pero esta versión no hace análisis automático de imágenes porque no depende de servicios externos.
 
 ## Personalizarla
 
 Busca `SYSTEM_PROMPT` en `app.py` para cambiar la personalidad de la IA. Cambia las variables de color en la primera línea de `style.css` y los textos en `index.html`.
 
-Para usar otro proveedor compatible con la API de Chat Completions, cambia `AI_BASE_URL` y `AI_MODEL` en `.env`.
+La app está preparada para que puedas modificar sus respuestas y agregar funciones directamente en el código.

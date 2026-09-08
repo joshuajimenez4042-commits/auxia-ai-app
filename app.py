@@ -3,8 +3,6 @@ import os
 import uuid
 from datetime import datetime
 from pathlib import Path
-from urllib.request import Request, urlopen
-
 from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template, request, session
 
@@ -55,51 +53,19 @@ def local_reply(message, mode):
             "preocupa. Con eso comparamos cada camino."
         )
     return (
-        "Te leo. Esta versión está funcionando en modo local porque aún no has "
-        "configurado una clave de IA. Añade OPENAI_API_KEY en tu archivo .env para "
-        "recibir respuestas generadas por un modelo."
+        "Te leo. Esta versión funciona de forma local, sin claves ni servicios externos. "
+        "Puedo ayudarte a ordenar ideas, calmarte, tomar decisiones y crear textos."
     )
 
 
 def ai_reply(message, history, mode, image_data=None):
-    api_key = os.getenv("OPENAI_API_KEY", "").strip()
-    if not api_key:
-        if image_data:
-            return "Recibí tu imagen. Configura OPENAI_API_KEY en .env para que pueda analizarla con visión."
-        return local_reply(message, mode)
-
-    base_url = os.getenv("AI_BASE_URL", "https://api.openai.com/v1/chat/completions")
-    model = os.getenv("AI_MODEL", "gpt-4o-mini")
-    mode_hint = {
-        "calma": "Guía un ejercicio breve de regulación emocional.",
-        "decision": "Ayuda a ordenar la decisión con preguntas y una comparación clara.",
-        "": "Responde de forma útil y concreta.",
-    }.get(mode, "Responde de forma útil y concreta.")
-
-    messages = [{"role": "system", "content": SYSTEM_PROMPT + "\n" + mode_hint}]
-    for item in history[-12:]:
-        messages.append({"role": item["role"], "content": item["content"]})
-    current_content = [{"type": "text", "text": message or "Analiza esta imagen."}]
+    """Respuesta local: la app funciona sin claves ni servicios externos."""
     if image_data:
-        current_content.append({"type": "image_url", "image_url": {"url": image_data}})
-    messages.append({"role": "user", "content": current_content if image_data else message})
-
-    payload = json.dumps({"model": model, "messages": messages, "temperature": 0.7}).encode()
-    req = Request(
-        base_url,
-        data=payload,
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {api_key}",
-        },
-        method="POST",
-    )
-    try:
-        with urlopen(req, timeout=60) as response:
-            data = json.loads(response.read().decode("utf-8"))
-        return data["choices"][0]["message"]["content"].strip()
-    except Exception:
-        return "No pude conectar con el servicio de IA. Revisa tu clave y AI_BASE_URL en el archivo .env."
+        return (
+            "Recibí tu imagen. Puedo guardarla en esta conversación, pero esta versión "
+            "funciona sin una API externa y no hace análisis automático de imágenes."
+        )
+    return local_reply(message, mode)
 
 
 @app.get("/")
