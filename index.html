@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2e4435">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Auxia — Tu asistente de IA</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#inicio"><span class="brand-mark">✦</span> Auxia</a>
+      <nav><button data-view="home">Inicio</button><button data-view="history">Historial</button><button data-view="saved">Insights guardados</button><button data-view="settings">Ajustes</button></nav>
+    </header>
+
+    <main>
+      <section id="home-view" class="view active">
+        <div class="hero" id="inicio">
+          <div class="eyebrow">Un espacio para ti</div>
+          <h1>Hola. ¿En qué te puedo ayudar hoy?</h1>
+          <p>Escribe lo que sientes, lo que necesitas decidir o lo que quieres crear. Te escucho con calma.</p>
+          <div class="composer">
+            <textarea id="message" rows="2" placeholder="Escribamos tu idea o problema…"></textarea>
+            <div class="composer-actions"><button id="image-btn" class="ghost" title="Usar cámara o elegir imagen">▧ Imagen</button><button id="voice-btn" class="ghost">◌ Dictar</button><button id="send-btn" class="send">↗</button></div>
+          </div>
+          <input id="image-input" type="file" accept="image/*" capture="environment" hidden>
+          <div id="image-preview" class="image-preview" hidden></div>
+        </div>
+
+        <div class="modes">
+          <button class="mode calm" data-mode="calma"><span class="mode-icon">☼</span><span><strong>Modo Calma</strong><small>Me siento abrumado y necesito calmarme. ¿Me guías con un ejercicio breve?</small></span><b>↗</b></button>
+          <button class="mode decision" data-mode="decision"><span class="mode-icon">◇</span><span><strong>Toma de Decisiones</strong><small>Tengo que tomar una decisión importante y no sé por dónde empezar.</small></span><b>↗</b></button>
+        </div>
+
+        <button class="daily" id="daily-btn"><span class="daily-icon">☀</span><span><strong>Resumen Diario</strong><small>Un pequeño recordatorio: respirar es productivo también.</small></span><b>›</b></button>
+        <section class="recent"><div class="section-head"><h2>Asistencia reciente</h2><span id="conversation-count">0 conversaciones</span></div><div id="recent-list"></div></section>
+        <div class="quick"><button data-shortcut="correo">✎ &nbsp;Redactar correo</button><button data-shortcut="concepto">◎ &nbsp;Explicar concepto</button><button data-shortcut="semana">▦ &nbsp;Planificar semana</button></div>
+      </section>
+
+      <section id="chat-view" class="view"><button class="back" data-view="home">← Volver</button><div id="chat-title" class="chat-title">Conversación</div><div id="chat-messages" class="chat-messages"></div><div class="composer"><textarea id="chat-message" rows="2" placeholder="Escribe tu mensaje…"></textarea><button id="chat-image-btn" class="ghost" title="Adjuntar imagen">▧</button><button id="chat-send" class="send">↗</button></div></section>
+      <section id="history-view" class="view"><h2>Historial</h2><div id="history-list"></div></section>
+      <section id="saved-view" class="view"><h2>Insights guardados</h2><div class="empty-card">Aquí aparecerán las ideas que guardes durante tus conversaciones.</div></section>
+      <section id="settings-view" class="view"><h2>Ajustes</h2><div class="settings-card"><p>Esta app guarda tus conversaciones en <strong>data/conversations.json</strong>.</p><p>La clave de IA vive solo en el servidor, dentro de tu archivo <strong>.env</strong>; nunca la pongas en el navegador.</p><hr><h3>Acceso de moderador</h3><p id="moderator-status">No has iniciado sesión.</p><div class="login-row"><input id="login-email" type="email" placeholder="Tu correo"><input id="login-password" type="password" placeholder="Contraseña"><button id="login-btn" class="send">Entrar</button></div><button id="logout-btn" class="ghost">Cerrar sesión</button></div></section>
+    </main>
+    <footer class="brand-footer">Generado por Zapia.com, tu IA personal</footer>
+    <div id="toast" class="toast"></div>
+  </div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
