@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).parent
 DATA_FILE = BASE_DIR / "data" / "conversations.json"
 DATA_FILE.parent.mkdir(exist_ok=True)
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=".", static_folder=".", static_url_path="/static")
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "cambia-esta-clave-en-tu-env")
 MODERATOR_EMAIL = os.getenv("MODERATOR_EMAIL", "").strip().lower()
 MODERATOR_PASSWORD = os.getenv("MODERATOR_PASSWORD", "")
