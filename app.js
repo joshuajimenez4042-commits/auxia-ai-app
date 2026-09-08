@@ -29,6 +29,16 @@ function addBubble(role, content) {
   bubble.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
+function speakText(text) {
+  if (!("speechSynthesis" in window) || !text) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "es-MX";
+  utterance.rate = 0.98;
+  utterance.pitch = 1;
+  window.speechSynthesis.speak(utterance);
+}
+
 function openChat(conversation) {
   currentConversationId = conversation.id;
   currentMode = "";
@@ -65,6 +75,7 @@ async function sendMessage(text, target, mode = "") {
     if (!response.ok) throw new Error(data.error || "No se pudo enviar");
     currentConversationId = data.conversation_id;
     addBubble("assistant", data.answer);
+    speakText(data.answer);
     loadRecent();
   } catch (error) {
     addBubble("assistant", `No pude responder todavía: ${error.message}`);
@@ -76,6 +87,11 @@ async function sendMessage(text, target, mode = "") {
 
 $("#send-btn").addEventListener("click", () => sendMessage($("#message").value, "home"));
 $("#chat-send").addEventListener("click", () => sendMessage($("#chat-message").value, "chat", currentMode));
+$("#speak-btn").addEventListener("click", () => {
+  const replies = [...document.querySelectorAll("#chat-messages .bubble.assistant")];
+  if (!replies.length) return showToast("Todavía no hay una respuesta para leer");
+  speakText(replies[replies.length - 1].textContent);
+});
 $("#message").addEventListener("keydown", (event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); $("#send-btn").click(); } });
 $("#chat-message").addEventListener("keydown", (event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); $("#chat-send").click(); } });
 
